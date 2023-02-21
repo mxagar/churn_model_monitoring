@@ -1,0 +1,25 @@
+name: churn
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.9
+  - pip
+  - requests
+  - mlflow
+  - jupyter
+  - jupyterlab
+  - scikit-learn
+  - scipy
+  - numpy
+  - pandas
+  - matplotlib
+  - seaborn
+  - nltk
+  - pip:
+      - Flask
+      - autopep8
+      - joblib
+      - pytest
+      - setuptools
+      - wheel

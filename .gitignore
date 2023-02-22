@@ -131,3 +131,9 @@ dmypy.json
 # Added
 .vscode
 .DS_Store
+python_manual.txt
+eda_fe_summary
+submission
+submission.zip
+data/ingested/final_data.csv
+data/ingested/ingested_files.txt

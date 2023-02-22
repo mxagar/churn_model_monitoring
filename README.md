@@ -118,10 +118,6 @@ conda env export > conda_.yaml
 pip list --format=freeze > requirements_.txt
 ```
 
-List of most important dependencies:
-
-- A
-- B
 
 ## Monitoring Implementation
 

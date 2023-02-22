@@ -27,17 +27,31 @@ The focus of this project doesn't lie so much on the data processing or modeling
 
 ## Dataset
 
+The dataset is composed of 5 CSV files, with 5 columns each, distributed as follows:
+
 ```
 data
+├── ingested/           # Ingested data folder (populated when run)
+│   └── ...
 ├── practice            # Practice data
-│   ├── dataset1.csv
-│   └── dataset2.csv
+│   ├── dataset1.csv    # Shape: (17, 5)
+│   └── dataset2.csv    # Shape: (19, 5)
 ├── source              # Data for training
-│   ├── dataset3.csv
-│   └── dataset4.csv
-└── test
-    └── test_data.csv
+│   ├── dataset3.csv    # Shape: (11, 5)
+│   └── dataset4.csv    # Shape: (15, 5)
+└── test                # Data for model testing
+    └── test_data.csv   # Shape: (5, 5)
 ```
+
+The files contain fabricated information of hypothetical corporations and, as shown, they consist of less than 20 entries/rows each. The 5 common columns are the following:
+
+- `corporation`: fictional name of the customer company (hashed name)
+- `lastmonth_activity`: number of services/goods provided last month
+- `lastyear_activity`: number of services/goods provided last year
+- `number_of_employees`: number of employees at the customer company
+- `exited`: **target**, whether the customer company ceased to buy services/goods.
+
+In summary, the dataset consists of 3 useful numerical features and a binary classification is done, which predicts customer company churn.
 
 ## How to Use This Project
 
@@ -47,22 +61,32 @@ The directory of the project consists of the following files:
 .
 ├── Instructions.md         # Summary of instructions by Udacity
 ├── README.md               # This file
-├── api_calls.py
-├── app.py
-├── conda.yaml
-├── config.json
+├── api_calls.py            # Calls to the API
+├── app.py                  # API endpoints
+├── assets/                 # Images and additional files
+│   └── ...
+├── conda.yaml              # Development environment dependencies
+├── config.json             # Configuration parameters for scripts
 ├── data/                   # Dataset(s)
-├── deployment.py
-├── diagnostics.py
-├── full_process.py
-├── ingestion.py
+│   └── ...
+├── deployment.py           # It deploys a trained model
+├── diagnostics.py          # Model and data diagnostics
+├── full_process.py         # It checks whether re-deploy needed
+├── ingestion.py            # It ingests new data
 ├── models/                 # Training artifacts
+│   └── ...
 ├── production_deployment/  # Final deployed models
-├── reporting.py
-├── requirements.txt
-├── scoring.py
-├── training.py
-└── wsgi.py
+│   └── ...
+├── reporting.py            # Reports about model metrics
+├── requirements.txt        # Deployment dependencies
+├── scoring.py              # Model scoring
+├── training.py             # Model training, artifacts generated
+└── wsgi.py                 # API deployment
+```
+
+Additionally, after the execution, new files are created:
+
+```
 ...
 ```
 
@@ -99,18 +123,30 @@ List of most important dependencies:
 - A
 - B
 
-## Notes on Theory
+## Monitoring Implementation
 
-## Notes on the Implemented Analysis and Modeling
+### 1. Data Ingestion
 
-### Summary of Contents
 
-- [ ] A
-- [ ] B
+### 2. Training, Scoring, Deploying
+
+
+### 3. Diagnostics
+
+
+### 4. Reporting
+
+
+### 5. Process Automation
+
 
 ## Results and Conclusions
 
 ## Next Steps, Improvements
+
+- [ ] Generate PDF reports which aggregate all outcomes (plots, summary statistics, etc.); check: [reportlab](https://www.reportlab.com/).
+- [ ] Store time trends: timestamp the reported results and store them (e.g., NAs, latency, etc.).
+- [ ] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/).
 
 ## References and Links
 

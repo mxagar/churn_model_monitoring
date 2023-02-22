@@ -15,3 +15,66 @@ Overview of steps:
 Submission: ZIP with project + reports from step 4.
 
 Udacity encourages to use the Linux Virtual machine accessed via their web interface; the starter code should be downloaded into `/home/workspace`. Even though the files persist between sessions, shell sessions are lost; additionally, the workspace closes automatically after 30 idle minutes.
+
+## Project Steps
+
+### 1. Data Ingestion
+
+
+### 2. Training, Scoring, Deploying
+
+
+### 3. Diagnostics
+
+
+### 4. Reporting
+
+
+### 5. Process Automation
+
+
+## Submission
+
+Submit a ZIP file with the following content:
+
+- `training.py`
+- `scoring.py`
+- `deployment.py`
+- `ingestion.py`
+- `diagnostics.py`
+- `reporting.py`
+- `app.py`
+- `apicalls.py`
+- `fullprocess.py`
+- `finaldata.csv` contains all the data that has been read from the practice data folder
+- `ingestedfiles.txt` that contains a list of filenames of the data that have been read from the practice data folder
+- `trainedmodel.pkl` contains a trained model using practice data
+- `latestcore.txt` that stores the F1 score from the practice model
+- `confusionmatrix.png` and `condusionmatrix2.png` output by the reporting.py
+- `apireturns.txt` and `apireturns2.txt` that contain the combined outputs of each of the API endpoints
+- `crontab` file
+
+### Rubric Summary
+
+All files need to be finished, the project needs to be working.
+
+- Data ingestion: `finaldata.csv` and `ingestedfiles.txt` files generated.
+- Training, scoring, deployment
+  - Model pickle persisted
+  - `latestscore.txt` generated
+  - `production_deployment` populated
+- Diagnostics
+  - Timing for ingestion and training
+  - Column summary statistics: mean, median, mode
+  - Data integrity: NA percentage
+  - Check dependency versions
+- Reporting API
+  - Scoring endpoint
+  - Summary statistics endpoint
+  - Diagnostics endpoint
+  - Model predictions endpoint
+  - Confusion matrix
+  - `api_calls.py` uses all endpoints and generates `api_returns.txt`
+- Process automation: `full_process.py`, `deployment.py`
+  - Check whether re-training and re-deployment necessary and perform them
+  - Cron job

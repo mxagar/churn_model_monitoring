@@ -137,3 +137,4 @@ submission
 submission.zip
 data/ingested/final_data.csv
 data/ingested/ingested_files.txt
+models/development/*.pkl

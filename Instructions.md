@@ -20,6 +20,14 @@ Udacity encourages to use the Linux Virtual machine accessed via their web inter
 
 ### 1. Data Ingestion
 
+The file `ingestion.py` needs to be created, which:
+
+- Loads `config.json`
+- Reads all datasets from the folders specified in the config
+- Merges all datasets
+- Removes duplicates
+- Persists merged dataset to specified path
+- Saves a record of all the merged data files
 
 ### 2. Training, Scoring, Deploying
 

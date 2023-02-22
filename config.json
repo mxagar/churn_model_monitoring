@@ -3,5 +3,14 @@
     "output_folder_path": "data/ingested",
     "test_data_path": "data/test",
     "output_model_path": "models/practice",
-    "prod_deployment_path": "production_deployment"
+    "prod_deployment_path": "production_deployment",
+    "compiled_data_filename": "final_data.csv",
+    "compilation_record_filename": "ingested_files.txt",
+    "dataset_columns": [
+        "corporation",
+        "lastmonth_activity",
+        "lastyear_activity",
+        "number_of_employees",
+        "exited"
+    ]
 }

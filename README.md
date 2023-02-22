@@ -1,10 +1,16 @@
 # A Dynamic Risk Assessment System: Monitoring of a Customer Churn Model
 
-The project contains a dynamic risk assessment system in which a customer churn model is monitored after a simulated deployment.
+This project contains a dynamic risk assessment system in which a customer churn model is monitored after a simulated deployment.
 
-*Customer churn* refers to customers that have high probability of leaving the services of a company, a.k.a. attrition risk. This is a common business problem faced by all companies; a related key principle behind it is that it's easier to keep a customer than getting a new one.
+*Customer churn* refers to the clients that have a high probability of halting the use of the services provided by a company, a.k.a. attrition risk. This is a common business problem faced by all companies; a related key principle behind it is that it's easier to keep a customer than getting a new one. Thus, the goal is to predict churn and a to avoid it.
 
-[starter-file.zip](https://video.udacity-data.com/topher/2021/March/60412fe6_starter-file/starter-file.zip)
+I took the [starter code](https://video.udacity-data.com/topher/2021/March/60412fe6_starter-file/starter-file.zip) for this project from the [Udacity Machine Learning DevOps Engineer Nanodegree](https://www.udacity.com/course/machine-learning-dev-ops-engineer-nanodegree--nd0821) and modified it to the present form, which deviates significantly from the original version.
+
+The focus of this project doesn't lie so much on the data processing or modeling, but on the techniques and technologies used for model/pipeline **monitoring after deployment**; in fact, dummy datasets are used instead of realistic ones. A list of the most important MLOps methods and tools used is the following:
+
+- [ ] A
+- [ ] A
+- [ ] A
 
 - [A Dynamic Risk Assessment System: Monitoring of a Customer Churn Model](#a-dynamic-risk-assessment-system-monitoring-of-a-customer-churn-model)
   - [Dataset](#dataset)
@@ -21,13 +27,42 @@ The project contains a dynamic risk assessment system in which a customer churn 
 
 ## Dataset
 
+```
+data
+├── practice            # Practice data
+│   ├── dataset1.csv
+│   └── dataset2.csv
+├── source              # Data for training
+│   ├── dataset3.csv
+│   └── dataset4.csv
+└── test
+    └── test_data.csv
+```
+
 ## How to Use This Project
 
 The directory of the project consists of the following files:
 
 ```
 .
-├── Instructions.md           # Original challenge instructions
+├── Instructions.md         # Summary of instructions by Udacity
+├── README.md               # This file
+├── api_calls.py
+├── app.py
+├── conda.yaml
+├── config.json
+├── data/                   # Dataset(s)
+├── deployment.py
+├── diagnostics.py
+├── full_process.py
+├── ingestion.py
+├── models/                 # Training artifacts
+├── production_deployment/  # Final deployed models
+├── reporting.py
+├── requirements.txt
+├── scoring.py
+├── training.py
+└── wsgi.py
 ...
 ```
 

@@ -1,0 +1,1 @@
+After `deployment.py`is run, this folder should contain `trained_model.pkl`.

@@ -1,16 +1,26 @@
 { 
-    "input_folder_path": "data/practice",
+    "input_folder_path": "data/development",
     "output_folder_path": "data/ingested",
     "test_data_path": "data/test",
-    "output_model_path": "models/practice",
+    "test_data_filename": "test_data.csv",
+    "output_model_path": "models/development",
     "prod_deployment_path": "production_deployment",
     "compiled_data_filename": "final_data.csv",
     "compilation_record_filename": "ingested_files.txt",
+    "model_filename": "trained_model.pkl",
+    "random_seed": 0,
+    "test_size": 0.1,
+    "target": "exited",
     "dataset_columns": [
         "corporation",
         "lastmonth_activity",
         "lastyear_activity",
         "number_of_employees",
         "exited"
+    ],
+    "features": [
+        "lastmonth_activity",
+        "lastyear_activity",
+        "number_of_employees"
     ]
 }

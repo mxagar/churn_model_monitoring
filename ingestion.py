@@ -17,7 +17,7 @@ from datetime import datetime
 with open('config.json','r') as f:
     config = json.load(f) 
 
-input_folder_path = config['input_folder_path'] # "data/practice", "data/source"
+input_folder_path = config['input_folder_path'] # "data/development", "data/source"
 output_folder_path = config['output_folder_path'] # "data/ingested"
 compiled_data_filename = config['compiled_data_filename'] # "final_data.csv"
 compilation_record_filename = config['compilation_record_filename'] # "ingested_files.txt"
@@ -28,6 +28,12 @@ def merge_multiple_data():
     and write to an output file/database.
     Additionally, a record of all the merged
     dataset files is written.
+    
+    Output filenames can be found in config.json and are
+    persisted to config.output_folder_path:
+    
+    - config.compiled_data_filename
+    - config.compilation_record_filename
     
     Args: None (all global variables from config.json)
     Returns: None (compiled dataset persisted to file)

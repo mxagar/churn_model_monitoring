@@ -31,6 +31,22 @@ The file `ingestion.py` needs to be created, which:
 
 ### 2. Training, Scoring, Deploying
 
+Three files need to be created, which carry out the tasks explained in the following; note that all the parameters required for the tasks should be in the `config.json` file, which needs to be loaded in every module:
+
+- `training.py`:
+  - Read merged dataset
+  - Define and train a logistic regression model
+  - Save the model pickle
+- `scoring.py`:
+  - Load the saved model pickle
+  - Load the test dataset
+  - Compute the F1 score of the model on the test dataset
+  - Persist score records to file
+- `deployment.py`:
+  - Copy from the development/practice folders to the production folder the following files:
+    - The trained model
+    - The records of the ingested data files used for training
+    - The records of the model scores
 
 ### 3. Diagnostics
 

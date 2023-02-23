@@ -144,13 +144,26 @@ As the rest of the scripts, [`ingestion.py`](./ingestion.py) relies on [`config.
 Produced outputs:
 
 - `data/ingested/final_data.csv`: merged dataset.
-- `data/ingested/ingested_files.txt`: dataset origin info related to the merge (path, entries, timestamp).
+- `data/ingested/ingested_files.csv`: dataset origin info related to the merge (path, entries, timestamp).
 
 ### 2. Training, Scoring, Deploying
 
-[`training.py`](./training.py)
-[`scoring.py`](./scoring.py)
-[`deployment.py`](./deployment.py)
+After loading all the necessary parameters from [`config.json`](./config.json), the following three files train the inference pipeline (model), evaluate its performance (i.e., score it on a test dataset) and deploy it to the production location (sub-tasks listed):
+
+- [`training.py`](./training.py):
+  - Read merged dataset: `data/ingested/final_data.csv`
+  - Define and train a logistic regression model
+  - Save the model pickle: `models/development/trained_model.pkl`
+- [`scoring.py`](./scoring.py):
+  - Load the saved model pickle: `models/development/trained_model.pkl`
+  - Load the test dataset: `data/test/test_data.csv`
+  - Compute the F1 score of the model on the test dataset
+  - Persist score records to file: `models/development/latest_score.csv`
+- [`deployment.py`](./deployment.py):
+  - Copy the following files from the development/practice folders to the production folder `models/production`:
+    - The trained model: `models/development/trained_model.pkl`
+    - The records of the ingested data files used for training: `data/ingested/ingested_files.csv`
+    - The records of the model scores: `models/development/latest_score.csv`
 
 ### 3. Diagnostics
 

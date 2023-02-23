@@ -1,0 +1,1 @@
+This folder contains the monitoring databases which are set up by `db_setup.py`.

@@ -11,10 +11,11 @@ import os
 import json
 import pickle
 import pandas as pd
-#import numpy as np
+import numpy as np
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
 #from flask import Flask, session, jsonify, request
@@ -34,17 +35,35 @@ target = config['target'] # 'exited'
 random_seed = config['random_seed']
 test_size = config['test_size']
 
-def save_pipeline(pipe):
+def save_pipeline(pipe, model_path):
     """Persist pipeline: transformations + model.
+    
+    Even though the path argument is in the global scope
+    of the definition module, the string is passed in case
+    the function is used outside.
     
     Args: None (file path should be in global scope)
     Returns: None (artifact persisted)
     """
     pickle.dump(pipe, open(model_path,'wb')) # wb: write bytes
 
+def load_pipeline(model_path):
+    """Load pipeline: transformations + model.
+
+    Even though the path argument is in the global scope
+    of the definition module, the string is passed in case
+    the function is used outside.
+    
+    Args: 
+        model_path (str): complete filename and path of the pipeline
+    Returns:
+        Pipeline
+    """
+    return pickle.load(open(model_path,'rb')) # rb: read bytes
+
 def train_model():
     """Define the inference pipeline and fit it to the data.
-    The pipeline consists of a scaler and a logistic
+    The pipeline consists of a mean imputer, a scaler and a logistic
     regression model.
     
     Args: None (defined in the global scope, taken from config.json)
@@ -55,6 +74,8 @@ def train_model():
     # FIXME: hyperparameter tuning is not considered here
     # FIXME: in a general situation, we'd define a Pipeline with more transformations...
     estimator = Pipeline([
+        ("mean_imputer", SimpleImputer(missing_values=np.nan,
+                                       strategy='mean')),
         ("scaler", StandardScaler()),
         ("logistic_regression", LogisticRegression(
             C=1.0,
@@ -100,7 +121,7 @@ def train_model():
     _ = metrics.f1_score(y_test, y_pred)
     
     # Persist pipeline/model
-    save_pipeline(estimator)
+    save_pipeline(estimator, model_path=model_path)
 
 if __name__ == "__main__":
     train_model()

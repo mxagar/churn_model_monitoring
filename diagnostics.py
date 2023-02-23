@@ -53,14 +53,22 @@ def cmdline(command):
     )
     return str(process.communicate()[0])
 
-def model_predictions():
+def model_predictions(data_path,
+                      model_path,
+                      features,
+                      target):
     """Predict outcomes for the test dataset
     using the trained model.
     
-    Necessary parameters are in the global scope,
-    loaded from config.json.
+    Event though the necessary parameters are in the global scope,
+    these are passed as arguments to be able to use the function
+    outside.
 
-    Args: None (all paths in the global scope, loaded from config.json)
+    Args:
+        data_path (str): dataset to be tested (complete path + filename)
+        model_path (str): model to be loaded (complete path + filename)
+        features (list): list of feature columns
+        target (str): target column name
     Returns:
         y_pred (list): predictions for the test dataset
         y_test (list): ground truth target values
@@ -69,7 +77,7 @@ def model_predictions():
     estimator = load_pipeline(model_path=model_path)
     
     # Load dataset
-    df = pd.read_csv(test_data_path)
+    df = pd.read_csv(data_path)
     X_test = df[features]
     y_test = list(df[target].values.ravel())
     
@@ -78,7 +86,8 @@ def model_predictions():
     
     return y_pred, y_test
     
-def dataframe_summary():
+def dataframe_summary(data_path,
+                      features):
     """Compute the summary statistics of the dataset
     used for training; for each feature, we get:
     
@@ -88,12 +97,14 @@ def dataframe_summary():
     - Number of missing rows/entries (NAs)
     - Percent of missing rows/entries (NAs)    
 
-    Args: None (all paths in the global scope, loaded from config.json)
+    Args:
+        data_path (str): path of the dataset to be analyzed
+        features (list): list of feature columns
     Returns:
         statistics (dict): dictionary with summary statistics
     """
     # Load dataset
-    df = pd.read_csv(dataset_csv_path)
+    df = pd.read_csv(data_path) # dataset_csv_path
 
     # Compute summary statistics
     means = []
@@ -179,9 +190,13 @@ def outdated_packages_list():
 
 if __name__ == '__main__':
 
-    y_pred = model_predictions()
+    y_pred, y_test = model_predictions(data_path=test_data_path,
+                                       model_path=model_path,
+                                       features=features,
+                                       target=target)
 
-    statistics = dataframe_summary()
+    statistics = dataframe_summary(data_path=dataset_csv_path,
+                                   features=features)
     statistics_df = pd.DataFrame(statistics)
 
     timing = execution_time()

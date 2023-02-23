@@ -35,21 +35,31 @@ features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'num
 target = config['target'] # 'exited'
 version = config['version'] # 0.1
 
-def score_model():
+def score_model(model_path,
+                data_path,
+                score_path,
+                features,
+                target):
     """Score model and save performance metrics.
     Then, save the value to disk.
     
     To that end, the trained model must be loaded, 
     as well as a test dataset.
     
-    Args: None (file paths should be in global scope)
-    Returns: None (results persisted to file in disk)
+    Args:
+        model_path (str): model to be loaded (complete path + filename)
+        data_path (str): dataset to be tested (complete path + filename)
+        score_path (str): records of scoring (complete path + filename)
+        features (list): list of feature columns
+        target (str): target column name
+    Returns: 
+        f1 (float): F1 score
     """
     # Load model pipeline
     estimator = load_pipeline(model_path=model_path)
     
     # Load dataset
-    df = pd.read_csv(test_data_path)
+    df = pd.read_csv(data_path) # test_data_path
     X_test = df[features]
     y_test = df[target]
 
@@ -65,5 +75,11 @@ def score_model():
     df_score = pd.DataFrame(score)
     df_score.to_csv(score_path, sep=',', header=True, index=False)
     
+    return f1
+    
 if __name__ == "__main__":
-    score_model()
+    _ = score_model(model_path=model_path,
+                    data_path=test_data_path,
+                    score_path=score_path,
+                    features=features,
+                    target=target)

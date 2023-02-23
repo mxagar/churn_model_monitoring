@@ -167,6 +167,12 @@ After loading all the necessary parameters from [`config.json`](./config.json), 
 
 ### 3. Diagnostics
 
+The script [`diagnostics.py`](./diagnostics.py) is responsible tracking dataset properties (to prevent data drift) and model predictions (to prevent model drift). Additionally, it measures operational aspects (timings, dependencies) to prevent anomalies. All in all it:
+
+- Performs model predictions with a test dataset: `data/test/test_data.csv`.
+- Provides with statistics of the training dataset, i.e., column means, medians, std. devs., NAs (count and percentage).
+- Computes the timing for for the `ingestion.py` and `training.py` scripts.
+- Provides information on dependencies: expected versions vs. actual per package; the `requirements.txt` file is used.
 
 ### 4. Reporting
 

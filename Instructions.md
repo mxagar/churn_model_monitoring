@@ -50,6 +50,12 @@ Three files need to be created, which carry out the tasks explained in the follo
 
 ### 3. Diagnostics
 
+The file `diagnostics.py` needs to be created, which:
+
+- Performs model predictions with a test dataset
+- Provides with statistics of the training dataset, i.e., column means, medians, std. devs., NAs (count and percentage).
+- Computes the timing for for the ingestion and training scripts
+- Provides information on dependencies: expected versions vs. actual per package
 
 ### 4. Reporting
 

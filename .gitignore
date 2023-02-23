@@ -135,6 +135,8 @@ python_manual.txt
 eda_fe_summary
 submission
 submission.zip
-data/ingested/final_data.csv
-data/ingested/ingested_files.txt
+data/ingested/*.csv
 models/development/*.pkl
+models/development/*.csv
+models/production/*.pkl
+models/production/*.csv

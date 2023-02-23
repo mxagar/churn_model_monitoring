@@ -16,6 +16,8 @@ import pandas as pd
 from sklearn import metrics
 #from flask import Flask, session, jsonify, request
 
+from training import load_pipeline
+
 # Load config.json and get path variables
 with open('config.json','r') as f:
     config = json.load(f) 
@@ -33,14 +35,6 @@ features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'num
 target = config['target'] # 'exited'
 version = config['version'] # 0.1
 
-def load_pipeline():
-    """Load pipeline: transformations + model.
-    
-    Args: None (file path should be in global scope)
-    Returns: Pipeline
-    """
-    return pickle.load(open(model_path,'rb')) # rb: read bytes
-
 def score_model():
     """Score model and save performance metrics.
     Then, save the value to disk.
@@ -52,7 +46,7 @@ def score_model():
     Returns: None (results persisted to file in disk)
     """
     # Load model pipeline
-    estimator = load_pipeline()
+    estimator = load_pipeline(model_path=model_path)
     
     # Load dataset
     df = pd.read_csv(test_data_path)

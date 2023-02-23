@@ -138,5 +138,6 @@ submission.zip
 data/ingested/*.csv
 models/development/*.pkl
 models/development/*.csv
+models/development/*.png
 models/production/*.pkl
 models/production/*.csv

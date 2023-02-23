@@ -7,6 +7,7 @@ Author: Mikel Sagardia
 Date: 2023-02-20
 """
 import os
+import subprocess
 import pickle
 import json
 import pandas as pd
@@ -20,11 +21,37 @@ from flask import Flask, session, jsonify, request
 with open('config.json','r') as f:
     config = json.load(f) 
 
-dataset_csv_path = os.path.join(config['output_folder_path']) 
-prod_deployment_path = os.path.join(config['prod_deployment_path']) 
+# "models/development/trained_model.pkl"
+model_path = os.path.join(os.getcwd(),
+                          config['output_model_path'],
+                          config['model_filename'])
+# "data/ingested/ingested_files.csv"
+compilation_record_path = os.path.join(os.getcwd(),
+                                       config['output_folder_path'],
+                                       config['compilation_record_filename'])
+# "models/development/latest_score.csv"
+score_path = os.path.join(os.getcwd(),
+                          config['output_model_path'],
+                          config['score_filename'])
+# "models/development/trained_model.pkl"
+prod_deployment_path = os.path.join(os.getcwd(),
+                                    config['prod_deployment_path'])
 
-def store_model_into_pickle(model):
-    #copy the latest pickle file, the latestscore.txt value, and the ingestfiles.txt file into the deployment directory
+def store_model_into_pickle():
+    """Store model and related artifacts into
+    production folder; altogether, these files are copied
+    to the production folder:
+    
+    - trained model
+    - record of ingested files to train it
+    - and score records of the trained model
+    
+    Args: None (all parameters loaded from config.json in global scope)
+    Returns: None (specified files are copied to prod folder)
+    """
+    subprocess.run(["cp", model_path, prod_deployment_path])
+    subprocess.run(["cp", compilation_record_path, prod_deployment_path])
+    subprocess.run(["cp", score_path, prod_deployment_path])
 
-if __nanme__ == "__main__":
+if __name__ == "__main__":
     store_model_into_pickle()

@@ -9,10 +9,12 @@
     "compilation_record_filename": "ingested_files.csv",
     "score_filename": "latest_score.csv",
     "model_filename": "trained_model.pkl",
+    "plot_filename": "confusion_matrix.png",
     "version": "0.0.1",
     "random_seed": 0,
     "test_size": 0.1,
     "target": "exited",
+    "flask_secret_key": "16526-484a-49fd-913a-68-a4",
     "dataset_columns": [
         "corporation",
         "lastmonth_activity",

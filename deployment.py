@@ -8,14 +8,11 @@ Date: 2023-02-20
 """
 import os
 import subprocess
-import pickle
+#import pickle
 import json
-import pandas as pd
-import numpy as np
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from flask import Flask, session, jsonify, request
+#import pandas as pd
+#import numpy as np
+#from flask import Flask, session, jsonify, request
 
 # Load config.json and get path variables
 with open('config.json','r') as f:

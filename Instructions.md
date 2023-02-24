@@ -91,8 +91,21 @@ As always, any necessary parameters (i.e., paths, filenames, etc.) should be tak
 
 ### 5. Process Automation
 
+First:
+  
 - Change `input_folder_path` in `config.json` from `data/development` to `data/production`.
 - Change `output_model_path` in `config.json` from `models/development` to `models/production`.
+
+Second, create the file `full_process.py`, which performs the following actions:
+
+- Check if there is new data; if so, continue
+- Check if there is model or data drift; if so:
+  - Re-train
+  - Re-deploy
+  - Run reporting for the re-deployed model 
+  - Compute new score for the re-deployed model
+  - Run diagnostics for the re-deployed model
+
 
 
 ## Submission

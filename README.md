@@ -176,6 +176,46 @@ The script [`diagnostics.py`](./diagnostics.py) is responsible tracking dataset 
 
 ### 4. Reporting
 
+Reporting is a accomplished with three scripts:
+
+- [`reporting.py`](./reporting.py)
+- [`app.py`](./app.py)
+- [`api_calls.py`](./api_calls.py)
+
+The file [`reporting.py`](./reporting.py) uses the `model_prediction()` function from `diagnostics.py` to predict the classes from `data/test/test_data.csv` and generate a confusion matrix, which is saved to `models/development/confusion_matrix.png`.
+
+If we fun the file [`app.py`](./app.py), it creates and serves an API based on Flask with the following endpoints, which can be used from another terminal session or with the browser:
+
+```bash
+# Predict in batch given a path to a dataset, e.g., data/test/test_data.csv
+curl "http://localhost:8000/prediction?filename=data/test/test_data.csv"
+
+# Predict in batch given a path to a dataset and compute F1 score; 
+# if no filename passed, data/test/test_data.csv is used.
+curl "http://localhost:8000/scoring"
+
+# Given a dataset, compute its summary stats, i.e.,
+# for each column/feature: mean, median, std. dev., NAs;
+# if no filename passed, data/ingested/final_data.csv is used.
+# Note: HTML table is returned.
+curl "http://localhost:8000/summarystats"
+
+# Check the time necessary for ingestion and training.
+curl "http://localhost:8000/diagnostics/timing"
+
+# Check the dependencies.
+# Note: HTML table is returned.
+curl "http://localhost:8000/diagnostics/dependencies"
+
+# Redirect to '/diagnostics/timing'.
+curl "http://localhost:8000/diagnostics"
+```
+
+In [`app.py`](./app.py), the functions from `diagnostics.py` are used to compute the responses.
+
+Finally, the file [`api_calls.py`](./api_calls.py) uses all those API endpoints and writes their responses to the file `models/development/api_returns.txt`.
+
+As always, any necessary parameters (i.e., paths, filenames, etc.) are taken from `config.json`.
 
 ### 5. Process Automation
 

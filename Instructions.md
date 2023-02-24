@@ -59,6 +59,35 @@ The file `diagnostics.py` needs to be created, which:
 
 ### 4. Reporting
 
+Three files need to be created: `reporting.py`, `app.py` and `api_calls.py`.
+
+The file `reporting.py` should create a confusion matrix image using the functionalities from `diagnostics.py`.
+
+The file `app.py` should create and serve an API with the following endpoints, that call the functionalities in `diagnostics.py`:
+
+```bash
+# Predict in batch given a path to a dataset, e.g., data/test/test_data.csv
+curl "http://localhost:8000/prediction?filename=data/test/test_data.csv"
+
+# Predict in batch given a path to a dataset and compute F1 score; 
+# if no filename passed, data/test/test_data.csv is used.
+curl "http://localhost:8000/scoring"
+
+# Given a dataset, compute its summary stats, i.e.,
+# for each column/feature: mean, median, std. dev., NAs;
+# if no filename passed, data/ingested/final_data.csv is used.
+curl "http://localhost:8000/summarystats"
+
+# Check the time necessary for ingestion and training.
+curl "http://localhost:8000/diagnostics/timing"
+
+# Check the dependencies.
+curl "http://localhost:8000/diagnostics/dependencies"
+```
+
+Finally, the file `api_calls.py` should use all those API endpoints and write to a file their responses.
+
+As always, any necessary parameters (i.e., paths, filenames, etc.) should be taken from `config.json`.
 
 ### 5. Process Automation
 

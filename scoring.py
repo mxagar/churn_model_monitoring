@@ -22,16 +22,20 @@ from training import load_pipeline
 with open('config.json','r') as f:
     config = json.load(f) 
 
+# "models/development/trained_model.pkl"
 model_path = os.path.join(os.getcwd(),
                           config['output_model_path'],
-                          config['model_filename']) # "models/development/trained_model.pkl"
+                          config['model_filename'])
+# "data/test/test_data.csv"
 test_data_path = os.path.join(os.getcwd(),
                               config['test_data_path'],
-                              config['test_data_filename']) # "data/test/test_data.csv"
+                              config['test_data_filename'])
+# "models/development/latest_score.csv"
 score_path = os.path.join(os.getcwd(),
                           config['output_model_path'],
-                          config['score_filename']) # "models/development/latest_score.csv"
-features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'number_of_employees']
+                          config['score_filename'])
+# ['lastmonth_activity', 'lastyear_activity', 'number_of_employees']
+features = config['features']
 target = config['target'] # 'exited'
 version = config['version'] # 0.1
 

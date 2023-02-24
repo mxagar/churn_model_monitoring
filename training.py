@@ -22,15 +22,18 @@ from sklearn.linear_model import LogisticRegression
 
 # Load config.json and get input and output paths
 with open('config.json','r') as f:
-    config = json.load(f) 
+    config = json.load(f)
 
+# "data/ingested/final_data.csv"
 dataset_csv_path = os.path.join(os.getcwd(),
                                 config['output_folder_path'],
-                                config['compiled_data_filename']) # "data/ingested/final_data.csv"
+                                config['compiled_data_filename'])
+# "models/development/trained_model.pkl"
 model_path = os.path.join(os.getcwd(),
                           config['output_model_path'],
-                          config['model_filename']) # "models/development/trained_model.pkl"
-features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'number_of_employees']
+                          config['model_filename'])
+# ['lastmonth_activity', 'lastyear_activity', 'number_of_employees']
+features = config['features']
 target = config['target'] # 'exited'
 random_seed = config['random_seed']
 test_size = config['test_size']

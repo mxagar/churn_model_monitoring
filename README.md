@@ -135,6 +135,27 @@ To fix all those issues, monitoring is applied in 5 aspects:
 4. Reporting
 5. Process Automation
 
+Note that the file paths in the following subsections are denoted for the `development` stage; in a `production` stage:
+
+- Data is ingested from `data/source`
+- Training artifacts are output to `models/production`
+
+The distinction between `development` and `production` can be controlled by manually updating `config.json` as follows:
+
+- In `development`: 
+
+  ```json
+  "input_folder_path": "data/development"
+  "output_model_path": "models/development"
+  ```
+
+- In `production`: 
+
+  ```json
+  "input_folder_path": "data/production"
+  "output_model_path": "models/production"
+  ```
+
 ### 1. Data Ingestion
 
 The script [`ingestion.py`](./ingestion.py) is responsible for merging data from different sources. Additionally, a record of source information is stored in order to backtrace the origin of the values.
@@ -160,7 +181,7 @@ After loading all the necessary parameters from [`config.json`](./config.json), 
   - Compute the F1 score of the model on the test dataset
   - Persist score records to file: `models/development/latest_score.csv`
 - [`deployment.py`](./deployment.py):
-  - Copy the following files from the development/practice folders to the production folder `models/production`:
+  - Copy the following files from the development/practice folders to the deployment folder `deployment`:
     - The trained model: `models/development/trained_model.pkl`
     - The records of the ingested data files used for training: `data/ingested/ingested_files.csv`
     - The records of the model scores: `models/development/latest_score.csv`

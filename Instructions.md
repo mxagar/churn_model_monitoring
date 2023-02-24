@@ -91,6 +91,9 @@ As always, any necessary parameters (i.e., paths, filenames, etc.) should be tak
 
 ### 5. Process Automation
 
+- Change `input_folder_path` in `config.json` from `data/development` to `data/source`.
+-  "output_model_path": "models/production",
+
 
 ## Submission
 

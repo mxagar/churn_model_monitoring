@@ -1,4 +1,21 @@
-"""This module 
+"""This module runs the full monitoring
+process, which is condensed in run_monitoring()
+ans has the following steps:
+
+- Check if there is new data; if so, continue
+- Check if there is model or data drift; if so:
+    - Re-train
+    - Re-deploy
+    - Run reporting for the re-deployed model 
+    - Compute new score for the re-deployed model
+    - Run diagnostics for the re-deployed model
+
+After that, we can spin up the diagnostics server:
+
+    $ python app.py
+
+Author: Mikel Sagardia
+Date: 2023-02-20
 """
 import os
 import json
@@ -112,7 +129,16 @@ def run_monitoring():
             # Run Diagnostics
             diagnostics.run_diagnostics()
             # Spin up diagnostics server
-            # NO
+            # and execute api_calls.run()
+            # FIXME: That's not a very good idea, because
+            # we would need to launch a separate 
+            # web server (with app.py) to which we access from another
+            # process (api_calls.py). Then, we'd need to
+            # kill the web server again.
+            # Instead, I think it's better start the server
+            # manually:
+            #   $ (shell 1) python app.py
+            #   $ (shell 2) python api_calls.py
         else:
             print("No significant changes found; continuing with current model.")            
     else:

@@ -1,10 +1,10 @@
 { 
-    "input_folder_path": "data/development",
+    "input_folder_path": "data/production",
     "output_folder_path": "data/ingested",
     "test_data_path": "data/test",
     "test_data_filename": "test_data.csv",
-    "output_model_path": "models/development",
-    "prod_deployment_path": "models/production",
+    "output_model_path": "models/production",
+    "prod_deployment_path": "deployment",
     "compiled_data_filename": "final_data.csv",
     "compilation_record_filename": "ingested_files.csv",
     "score_filename": "latest_score.csv",

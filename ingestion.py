@@ -17,11 +17,16 @@ from datetime import datetime
 with open('config.json','r') as f:
     config = json.load(f) 
 
-input_folder_path = config['input_folder_path'] # "data/development", "data/source"
-output_folder_path = config['output_folder_path'] # "data/ingested"
-compiled_data_filename = config['compiled_data_filename'] # "final_data.csv"
-compilation_record_filename = config['compilation_record_filename'] # "ingested_files.txt"
-dataset_columns = config['dataset_columns'] # ['corporation', 'lastmonth_activity', 'lastyear_activity', 'number_of_employees', 'exited']
+# "data/development", "data/production"
+input_folder_path = config['input_folder_path']
+# "data/ingested"
+output_folder_path = config['output_folder_path']
+# "final_data.csv"
+compiled_data_filename = config['compiled_data_filename']
+# "ingested_files.txt"
+compilation_record_filename = config['compilation_record_filename']
+# ['corporation', 'lastmonth_activity', 'lastyear_activity', 'number_of_employees', 'exited']
+dataset_columns = config['dataset_columns']
 
 def merge_multiple_data():
     """Check for datasets, compile them together, 

@@ -35,7 +35,7 @@ target = config['target'] # 'exited'
 random_seed = config['random_seed']
 test_size = config['test_size']
 
-def save_pipeline(pipe, model_path):
+def save_pipeline(pipe, model_path=model_path):
     """Persist pipeline: transformations + model.
     
     Even though the path argument is in the global scope
@@ -47,7 +47,7 @@ def save_pipeline(pipe, model_path):
     """
     pickle.dump(pipe, open(model_path,'wb')) # wb: write bytes
 
-def load_pipeline(model_path):
+def load_pipeline(model_path=model_path):
     """Load pipeline: transformations + model.
 
     Even though the path argument is in the global scope

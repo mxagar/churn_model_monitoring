@@ -35,11 +35,11 @@ features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'num
 target = config['target'] # 'exited'
 version = config['version'] # 0.1
 
-def score_model(model_path,
-                data_path,
-                score_path,
-                features,
-                target):
+def score_model(model_path=model_path,
+                data_path=test_data_path,
+                score_path=score_path,
+                features=features,
+                target=target):
     """Score model and save performance metrics.
     Then, save the value to disk.
     

@@ -10,6 +10,7 @@
     "score_filename": "latest_score.csv",
     "model_filename": "trained_model.pkl",
     "plot_filename": "confusion_matrix.png",
+    "api_call_filename": "api_returns.txt",
     "version": "0.0.1",
     "random_seed": 0,
     "test_size": 0.1,

@@ -14,6 +14,11 @@ After that, we can spin up the diagnostics server:
 
     $ python app.py
 
+And that server can be accessed by external stakeholders;
+as an example, api_calls.py shows how:
+
+    $ python api_calls.py
+
 Author: Mikel Sagardia
 Date: 2023-02-20
 """

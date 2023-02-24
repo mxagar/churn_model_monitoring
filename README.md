@@ -219,6 +219,9 @@ As always, any necessary parameters (i.e., paths, filenames, etc.) are taken fro
 
 ### 5. Process Automation
 
+<p style="text-align:center">
+  <img src="./assets/monitoring_workflow.jpg" alt="Monitoring workflow." width=1000px>
+</p>
 
 ## Results and Conclusions
 

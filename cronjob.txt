@@ -1,0 +1,2 @@
+# Cron job to run every 10
+* * * * 10  python /home/mikel/git_repositories/churn_model_monitoring/full_process.py

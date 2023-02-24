@@ -13,7 +13,7 @@ http://127.0.0.1:8000/summarystats
 2  number_of_employees   457.461538    99.0    800.604833       0      0.0
 
 http://127.0.0.1:8000/diagnostics/timing
-{'ingestion': 0.5245058749999991, 'training': 0.9397374159999998}
+{'ingestion': 0.530754666, 'training': 0.873435583}
 
 http://127.0.0.1:8000/diagnostics/dependencies
             package expected_version actual_version

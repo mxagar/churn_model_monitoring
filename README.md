@@ -27,7 +27,6 @@ The focus of this project doesn't lie so much on the data processing or modeling
     - [3. Diagnostics](#3-diagnostics)
     - [4. Reporting](#4-reporting)
     - [5. Process Automation](#5-process-automation)
-  - [Results and Conclusions](#results-and-conclusions)
   - [Next Steps, Improvements](#next-steps-improvements)
   - [References and Links](#references-and-links)
   - [Authorship](#authorship)
@@ -227,7 +226,7 @@ Reporting is a accomplished with three scripts:
 
 The file [`reporting.py`](./reporting.py) uses the `model_prediction()` function from `diagnostics.py` to predict the classes from `data/test/test_data.csv` and generate a confusion matrix, which is saved to `models/development/confusion_matrix.png`.
 
-If we run the file [`app.py`](./app.py), 
+If we run the file [`app.py`](./app.py)
 
 ```bash
 python app.py
@@ -297,21 +296,31 @@ crontab -e
 crontab -l
 ```
 
-## Results and Conclusions
-
 ## Next Steps, Improvements
 
+This is a basic monitoring project in which a very simple model/pipeline is created. However, a valid, general framework which uses the minimum amount of 3rd party tools is defined; moreover, we can easily scale the complexity of the inference pipeline, e.g., by defining it in a separate library which is accessed by the scripts in this project. As such, this repository can be used as a **blueprint for basic monitoring**. Without using any 3rd party tools, one could improve the project as follows:
+
+- [ ] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/).
 - [ ] Generate PDF reports which aggregate all outcomes (plots, summary statistics, etc.); check: [reportlab](https://www.reportlab.com/).
 - [ ] Store time trends: timestamp the reported results and store them (e.g., NAs, latency, etc.).
-- [ ] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/).
 
 ## References and Links
 
-- A
-- B
-- C
-- Link
-- Link
+My notes and guides:
+
+- My personal notes on the [Udacity MLOps](https://www.udacity.com/course/machine-learning-dev-ops-engineer-nanodegree--nd0821) Nanodegree: [mlops_udacity](https://github.com/mxagar/mlops_udacity).
+- My boilerplate for reproducible ML pipelines using [MLflow](https://www.mlflow.org/) and [Weights & Biases](https://wandb.ai/site): [music_genre_classification](https://github.com/mxagar/music_genre_classification).
+- Notes on how to transform research code into production-level packages: [customer_churn_production](https://github.com/mxagar/customer_churn_production).
+- My summary of data processing and modeling techniques: [eda_fe_summary](https://github.com/mxagar/eda_fe_summary).
+- My notes on the Udemy course [Deployment of Machine Learning Models](https://www.udemy.com/course/deployment-of-machine-learning-models) by Soledad Galli & Christopher Samiullah: [deploying-machine-learning-models](https://github.com/mxagar/deploying-machine-learning-models).
+
+
+Other links:
+
+- [MLOps: What It Is, Why It Matters, and How to Implement It](https://neptune.ai/blog/mlops)
+- [MLOps Core](https://ml-ops.org/content/references.html)
+- [10 Amazing MLOps Learning Resources](https://medium.com/analytics-vidhya/10-amazing-mlops-learning-resources-378804c418be)
+- [MLOps-Reducing the technical debt of Machine Learning](https://medium.com/mlops-community/mlops-reducing-the-technical-debt-of-machine-learning-dac528ef39de)
 
 ## Authorship
 

@@ -18,11 +18,15 @@ To run this app:
 Then, on another terminal / browser:
 
     $ curl http://localhost:8000/prediction?filename=data/test/test_data.csv
+    $ curl http://localhost:8000/scoring
     $ curl http://localhost:8000/scoring?filename=data/test/test_data.csv
+    $ curl http://localhost:8000/summarystats
     $ curl http://localhost:8000/summarystats?filename=data/ingested/final_data.csv
     $ curl http://localhost:8000/diagnostics/timing
     $ curl http://localhost:8000/diagnostics/dependencies
     $ curl http://localhost:8000/diagnostics
+
+Note: /summarystats and /diagnostics/dependencies return HTML tables.
 
 Author: Mikel Sagardia
 Date: 2023-02-20
@@ -83,6 +87,8 @@ def predict():
     """Predict in batch given a path to a dataset, e.g.,
     data/test/test_data.csv
     
+    Return: y_pred (str): array of predicted classes
+    
     Example call:
         http://localhost:8000/prediction?filename=data/test/test_data.csv
     """
@@ -101,14 +107,21 @@ def predict():
 
 @app.route("/scoring") # methods=['GET','OPTIONS']
 def scoring():        
-    """Predict in batch given a path to a dataset, e.g.,
-    data/test/test_data.csv, and compute F1 score.
+    """Predict in batch given a path to a dataset
+    and compute F1 score; if no filename passed,
+    data/test/test_data.csv is used.
     
-    Example call:
+    Return: f1 (str)
+    
+    Example calls:
+        http://localhost:8000/scoring
         http://localhost:8000/scoring?filename=data/test/test_data.csv
     """
     response = "Prediction not tested."
+    filename = None
     filename = request.args.get('filename')
+    if not filename:
+        filename = test_data_path
     try:
         f1 = score_model(model_path=model_path,
                          data_path=filename,
@@ -124,13 +137,20 @@ def scoring():
 @app.route("/summarystats") # methods=['GET','OPTIONS']
 def stats():
     """Given a dataset, compute its summary stats, i.e.,
-    for each column/feature: mean, median, std. dev., NAs.
+    for each column/feature: mean, median, std. dev., NAs;
+    if no filename passed, data/ingested/final_data.csv is used.
+    
+    Return: statistics (str): HTML table with statistics
     
     Example call:
+        http://localhost:8000/summarystats
         http://localhost:8000/summarystats?filename=data/ingested/final_data.csv
     """
-    response = "Prediction not tested."
+    response = "Dataset not evaluated."
+    filename = None
     filename = request.args.get('filename')
+    if not filename:
+        filename = dataset_csv_path
     try:
         statistics = dataframe_summary(data_path=filename, # dataset_csv_path
                                        features=features)
@@ -144,10 +164,12 @@ def stats():
 def timing():  
     """Check the time necessary for ingestion and training.
     
+    Return: timing (str): dictionary with process timing
+    
     Example call:
         http://localhost:8000/diagnostics/timing
     """
-    response = "Prediction not tested."
+    response = "Processes not timed."
     try:
         timing = execution_time()
         response = str({"ingestion": timing[0], "training": timing[1]})
@@ -160,10 +182,12 @@ def timing():
 def dependencies():  
     """Check the dependencies.
     
+    Return: packages (str): HTML table with dependencies states
+    
     Example call:
         http://localhost:8000/diagnostics/dependencies
     """
-    response = "Prediction not tested."
+    response = "Dependencies not checked."
     try:
         packages = outdated_packages_list()
         response = pd.DataFrame(packages).to_html()
@@ -174,7 +198,7 @@ def dependencies():
 
 @app.route("/diagnostics") # methods=['GET','OPTIONS']
 def diagnostics():
-    """Redirect to "/diagnostics/timing"""
+    """Redirect to '/diagnostics/timing'."""
     # url_for() expects either the page/view function
     return redirect(url_for("timing"))
 

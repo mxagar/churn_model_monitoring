@@ -141,3 +141,6 @@ models/development/*.csv
 models/development/*.png
 models/production/*.pkl
 models/production/*.csv
+models/production/*.png
+deployment/*.pkl
+deployment/*.csv

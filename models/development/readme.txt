@@ -1,3 +1,5 @@
+This folder is populated during development, i.e., when the datasets used for training are taken from `data/development`.
+
 After `training.py`is run, this folder should contain:
 
 - `trained_model.pkl`

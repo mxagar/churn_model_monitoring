@@ -32,27 +32,25 @@ import reporting
 with open('config.json','r') as f:
     config = json.load(f)
 
-# "data/ingested/final_data.csv"
-dataset_csv_path = os.path.join(os.getcwd(),
-                                config['output_folder_path'],
-                                config['compiled_data_filename'])
  # "data/development", "data/production"
 input_folder_path = os.path.join(os.getcwd(),
                                  config['input_folder_path'])
 # "data/ingested/ingested_files.csv"
 ingestion_record_path = os.path.join(os.getcwd(),
-                                     config['output_folder_path'],
+                                     config['prod_deployment_path'],
                                      config['compilation_record_filename'])
-# "models/production/trained_model.pkl"
+# "models/development/latest_score.csv"
+score_path = os.path.join(os.getcwd(),
+                          config['prod_deployment_path'],
+                          config['score_filename'])
+# "deployment/trained_model.pkl"
 model_path = os.path.join(os.getcwd(),
                           config['prod_deployment_path'],
                           config['model_filename'])
-# "data/test/test_data.csv"
-test_data_path = os.path.join(os.getcwd(),
-                              config['test_data_path'],
-                              config['test_data_filename'])
-features = config['features'] # ['lastmonth_activity', 'lastyear_activity', 'number_of_employees']
-target = config['target'] # 'exited'
+# "data/ingested/final_data.csv"
+dataset_csv_path = os.path.join(os.getcwd(),
+                                config['output_folder_path'],
+                                config['compiled_data_filename'])
 
 def check_ingested_data():
     """Check that all the files from config.input_folder_path
@@ -86,8 +84,16 @@ def check_model_drift():
     
     """
     #check whether the score from the deployed model is different from the score from the model that uses the newest ingested data
-    pass
-
+    scores = pd.read_csv(score_path)
+    f1_old = scores.iloc[-1,-1]
+    f1 = scoring.score_model(model_path=model_path,
+                             data_path=dataset_csv_path)
+    has_drift = False
+    if f1_old < f1:
+        has_drift = True
+        
+    return has_drift
+    
 def check_data_drift():
     """Check whether there is data drift:
     That occurs when the distributions of the column values
@@ -118,6 +124,7 @@ def run_monitoring():
         model_drift = check_model_drift()
         data_drift = check_data_drift()
         if model_drift or data_drift:
+            print("There is drift: re-training and re-deploying...")
             # Re-Train
             training.train_model()
             # Re-Deploy
@@ -139,10 +146,12 @@ def run_monitoring():
             # manually:
             #   $ (shell 1) python app.py
             #   $ (shell 2) python api_calls.py
+            print("New model replaced successfully!")
         else:
             print("No significant changes found; continuing with current model.")            
     else:
         print("No new data found; continuing with current model.")
+
 
 if __name__ == "__main__":
     run_monitoring()

@@ -36,7 +36,7 @@ data
 ├── development         # Data used during development
 │   ├── dataset1.csv    # Shape: (17, 5)
 │   └── dataset2.csv    # Shape: (19, 5)
-├── source              # Data for re-training
+├── production          # Production data, for re-training
 │   ├── dataset3.csv    # Shape: (11, 5)
 │   └── dataset4.csv    # Shape: (15, 5)
 └── test                # Data for model testing
@@ -135,10 +135,10 @@ To fix all those issues, monitoring is applied in 5 aspects:
 4. Reporting
 5. Process Automation
 
-Note that the file paths in the following subsections are denoted for the `development` stage; in a `production` stage:
+Note that the file paths in the following subsections are denoted for the **`development`** stage; in a **`production`** stage:
 
-- Data is ingested from `data/source`
-- Training artifacts are output to `models/production`
+- The data is ingested from `data/source`.
+- The training, scoring and diagnosing artifacts are output to `models/production`.
 
 The distinction between `development` and `production` can be controlled by manually updating `config.json` as follows:
 
@@ -155,6 +155,8 @@ The distinction between `development` and `production` can be controlled by manu
   "input_folder_path": "data/production"
   "output_model_path": "models/production"
   ```
+
+Additionally, in a real production environment, the `flask_secret_key` field from `config.json` should be removed from the file/repository. Instead, we should use either (*i*) secrets, (*ii*) environment variables, or (*iii*) the production `config.json` should not be committed.
 
 ### 1. Data Ingestion
 
@@ -205,7 +207,13 @@ Reporting is a accomplished with three scripts:
 
 The file [`reporting.py`](./reporting.py) uses the `model_prediction()` function from `diagnostics.py` to predict the classes from `data/test/test_data.csv` and generate a confusion matrix, which is saved to `models/development/confusion_matrix.png`.
 
-If we fun the file [`app.py`](./app.py), it creates and serves an API based on Flask with the following endpoints, which can be used from another terminal session or with the browser:
+If we run the file [`app.py`](./app.py), 
+
+```bash
+python app.py
+```
+
+it creates and serves an API based on Flask with the following endpoints, which can be used from another terminal session or with the browser:
 
 ```bash
 # Predict in batch given a path to a dataset, e.g., data/test/test_data.csv

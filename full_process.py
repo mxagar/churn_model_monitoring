@@ -81,13 +81,17 @@ def check_ingested_data():
 
 def check_model_drift():
     """Check whether there is model drift:
-    
+    That occurs when the score from the deployed model
+    is different (smaller) from the score from the model 
+    that uses the newest ingested data.
     """
-    #check whether the score from the deployed model is different from the score from the model that uses the newest ingested data
+    # Get old score F1
     scores = pd.read_csv(score_path)
     f1_old = scores.iloc[-1,-1]
+    # Score new model with new data
     f1 = scoring.score_model(model_path=model_path,
                              data_path=dataset_csv_path)
+    # If new F1 score is better, there is model drift
     has_drift = False
     if f1_old < f1:
         has_drift = True

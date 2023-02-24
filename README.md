@@ -6,19 +6,27 @@ This project contains a dynamic risk assessment system in which a customer churn
 
 I took the [starter code](https://video.udacity-data.com/topher/2021/March/60412fe6_starter-file/starter-file.zip) for this project from the [Udacity Machine Learning DevOps Engineer Nanodegree](https://www.udacity.com/course/machine-learning-dev-ops-engineer-nanodegree--nd0821) and modified it to the present form, which deviates significantly from the original version.
 
-The focus of this project doesn't lie so much on the data processing or modeling, but on the techniques and technologies used for model/pipeline **monitoring after deployment**; in fact, dummy datasets are used instead of realistic ones. A list of the most important MLOps monitoring methods and tools used is the following:
+The focus of this project doesn't lie so much on the data processing or modeling, but on the techniques and technologies used for model/pipeline **monitoring after deployment**; in fact, dummy datasets are used instead of realistic ones. Monitoring is achieved by implementing methods that enable these functionalities:
 
-- [ ] A
-- [ ] A
-- [ ] A
+- [x] **Data ingestion**: new data can be checked ad-hoc.
+- [x] **Re-training, Re-scoring and Re-deploying**: with new data, data and model drift can be computed; if there is drift, the monitoring system is able to re-train and re-deploy a model/pipeline.
+- [x] **Online diagnostics via an API**: any deployed model/pipeline can be diagnosed by stakeholders using a REST API.
+- [x] **Status reporting**: beyond API diagnoses, complete model status reports can be generated.
+- [x] **Process automation with cron jobs**: the complete monitoring process can be automated, from data check to re-deployment and reporting; additionally, the execution can run with the desired frequency.
+
+## Table of Contents
 
 - [A Dynamic Risk Assessment System: Monitoring of a Customer Churn Model](#a-dynamic-risk-assessment-system-monitoring-of-a-customer-churn-model)
+  - [Table of Contents](#table-of-contents)
   - [Dataset](#dataset)
   - [How to Use This Project](#how-to-use-this-project)
     - [Installing Dependencies for Custom Environments](#installing-dependencies-for-custom-environments)
-  - [Notes on Theory](#notes-on-theory)
-  - [Notes on the Implemented Analysis and Modeling](#notes-on-the-implemented-analysis-and-modeling)
-    - [Summary of Contents](#summary-of-contents)
+  - [Monitoring Implementation](#monitoring-implementation)
+    - [1. Data Ingestion](#1-data-ingestion)
+    - [2. Training, Scoring, Deploying](#2-training-scoring-deploying)
+    - [3. Diagnostics](#3-diagnostics)
+    - [4. Reporting](#4-reporting)
+    - [5. Process Automation](#5-process-automation)
   - [Results and Conclusions](#results-and-conclusions)
   - [Next Steps, Improvements](#next-steps-improvements)
   - [References and Links](#references-and-links)
@@ -65,9 +73,9 @@ The directory of the project consists of the following files:
 ├── app.py                  # API endpoints
 ├── assets/                 # Images and additional files
 │   └── ...
-├── conda.yaml              # Development environment dependencies
 ├── config.json             # Configuration parameters for scripts
-├── data/                   # Dataset(s)
+├── cronjob.txt             # Cron job
+├── data/                   # Dataset(s), dev and prod
 │   └── ...
 ├── deployment.py           # It deploys a trained model
 ├── diagnostics.py          # Model and data diagnostics
@@ -82,40 +90,52 @@ The directory of the project consists of the following files:
 └── wsgi.py                 # API deployment
 ```
 
-Additionally, after the execution, new files are created:
+Once we have created an environment and [installed the required dependencies](#installing-dependencies-for-custom-environments), we can run the scripts separately as follows:
 
+```bash
+# Ingest data
+python ingestion.py
+# Train model/pipeline
+python training.py
+# Deploy model/pipeline
+python deployment.py
+# Score model/pipeline
+python scoring.py
+# Report
+python reporting.py
+# Run diagnosis
+python diagnosis.py
 ```
-...
+
+Alternatively, we can run the full process as follows:
+
+```bash
+python full_process.py
 ```
 
-You can run the notebook at leas in two ways:
+If we want to start the diagnosing API, we need to run:
 
-1. In a custom environment, e.g., locally or on a container. To that end, you can create a [conda](https://docs.conda.io/en/latest/) environment and install the [dependencies](#installing-dependencies-for-custom-environments) as explained below.
-2. In Google Colab. For that, simply click on the following link:
+```bash
+# Shell 1: Start the API on the web server: http://localhost:8000
+python app.py
+# Shell 2: API access calls
+python api_calls.py
+```
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mxagar/airbnb_data_analysis/blob/master/00_AirBnB_DataAnalysis_Initial_Tests.ipynb)
-
+The section [Monitoring Implementation](#monitoring-implementation) explains in more detail what happens in each of the steps/scripts.
 
 ### Installing Dependencies for Custom Environments
 
 If you'd like to control where the notebook runs, you need to create a custom environment and install the required dependencies. A quick recipe which sets everything up with [conda](https://docs.conda.io/en/latest/) is the following:
 
 ```bash
-# Create environment with YAML, incl. packages
-conda env create -f conda.yaml
-conda activate env-name
-# Or
-conda create --name env-name pip
-condat install <package>
+# Create an environment
+conda create --name churn pip
+conda activate churn
 
 # Install pip dependencies
-pip install requirements.txt
-
-# Track any changes and versions you have
-conda env export > conda_.yaml
-pip list --format=freeze > requirements_.txt
+pip install -r requirements.txt
 ```
-
 
 ## Monitoring Implementation
 
@@ -248,9 +268,34 @@ As always, any necessary parameters (i.e., paths, filenames, etc.) are taken fro
 
 ### 5. Process Automation
 
+It is possible to run all scripts mentioned so far in sequence, as done by [`full_process.txt`](./full_process.txt); the following image shows the complete monitoring workflow implemented in that file:
+
 <p style="text-align:center">
-  <img src="./assets/monitoring_workflow.jpg" alt="Monitoring workflow." width=1000px>
+  <img src="./assets/monitoring_workflow.jpg" alt="Monitoring workflow." width=500px>
 </p>
+
+As we can see, [`full_process.txt`](./full_process.txt) performs these actions:
+
+- Check if there is new data; if so, ingest it and continue
+- Check if there is model or data drift; if so:
+  - Re-train
+  - Re-deploy
+  - Run reporting for the re-deployed model 
+  - Compute new score for the re-deployed model
+  - Run diagnostics for the re-deployed model
+
+We can launch the app with API in the same execution, but that means we need to kill any previously running API. The monitoring process can be further automated by creating a cron job which executes [`full_process.txt`](./full_process.txt) every 10 minutes, as defined in [`cronjob.txt`](./cronjob.txt). To create a cron job on a Unix machine, we can follow this recipe:
+
+```bash
+# Start the cron service, if not done already
+service cron start
+# Edit the crontab with the job
+# * * * * 10  python /home/mikel/git_repositories/churn_model_monitoring/full_process.py
+crontab -e
+# ESC, i, edit, :q
+# Load the crontab and display jobs
+crontab -l
+```
 
 ## Results and Conclusions
 

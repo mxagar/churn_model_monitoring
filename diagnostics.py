@@ -53,10 +53,10 @@ def cmdline(command):
     )
     return str(process.communicate()[0])
 
-def model_predictions(data_path,
-                      model_path,
-                      features,
-                      target):
+def model_predictions(data_path=test_data_path,
+                      model_path=model_path,
+                      features=features,
+                      target=target):
     """Predict outcomes for the test dataset
     using the trained model.
     
@@ -86,14 +86,15 @@ def model_predictions(data_path,
     
     return y_pred, y_test
     
-def dataframe_summary(data_path,
-                      features):
+def dataframe_summary(data_path=dataset_csv_path,
+                      features=features):
     """Compute the summary statistics of the dataset
     used for training; for each feature, we get:
     
     - Mean
     - Median
     - Standard deviation
+    - Support: number of non-null entries
     - Number of missing rows/entries (NAs)
     - Percent of missing rows/entries (NAs)    
 
@@ -110,12 +111,14 @@ def dataframe_summary(data_path,
     means = []
     medians = []
     std_devs = []
+    supports = []
     num_nas = []
     pcnt_nas = []
     for feat in features:
         means.append(df[feat].mean())
         medians.append(df[feat].median())
         std_devs.append(df[feat].std())
+        supports.append(df.shape[0] - df[feat].isna().sum())
         num_nas.append(df[feat].isna().sum())
         pcnt_nas.append(100.0*df[feat].isna().sum()/df.shape[0])
 
@@ -124,6 +127,7 @@ def dataframe_summary(data_path,
                    "mean": means,
                    "median": medians,
                    "std_dev": std_devs,
+                   "support": supports,
                    "num_na": num_nas,
                    "pcnt_na": pcnt_nas}
 
@@ -188,8 +192,8 @@ def outdated_packages_list():
 
     return packages
 
-if __name__ == '__main__':
-
+def run_diagnostics():
+    """Run all diagnostics."""
     y_pred, y_test = model_predictions(data_path=test_data_path,
                                        model_path=model_path,
                                        features=features,
@@ -203,3 +207,6 @@ if __name__ == '__main__':
 
     packages = outdated_packages_list()
     packages_df = pd.DataFrame(packages)
+    
+if __name__ == '__main__':
+    run_diagnostics()

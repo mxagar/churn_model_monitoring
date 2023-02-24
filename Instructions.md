@@ -106,7 +106,7 @@ Second, create the file `full_process.py`, which performs the following actions:
   - Compute new score for the re-deployed model
   - Run diagnostics for the re-deployed model
 
-
+Finally, create a cron job so that `full_process.py` is run every 10 minutes and save the job description to `cronjob.txt`.
 
 ## Submission
 

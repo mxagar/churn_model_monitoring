@@ -13,6 +13,7 @@ The focus of this project doesn't lie so much on the data processing or modeling
 - [x] **Online diagnostics via an API**: any deployed model/pipeline can be diagnosed by stakeholders using a REST API.
 - [x] **Status reporting**: beyond API diagnoses, complete model status reports can be generated.
 - [x] **Process automation with cron jobs**: the complete monitoring process can be automated, from data check to re-deployment and reporting; additionally, the execution can run with the desired frequency.
+- [x] **SQL database**: monitoring records are persisted to a SQLite database using SQLAlchemy.
 
 ## Table of Contents
 
@@ -27,6 +28,7 @@ The focus of this project doesn't lie so much on the data processing or modeling
     - [3. Diagnostics](#3-diagnostics)
     - [4. Reporting](#4-reporting)
     - [5. Process Automation](#5-process-automation)
+    - [Monitoring Database](#monitoring-database)
   - [Next Steps, Improvements](#next-steps-improvements)
   - [References and Links](#references-and-links)
   - [Authorship](#authorship)
@@ -76,6 +78,9 @@ The directory of the project consists of the following files:
 ├── cronjob.txt             # Cron job
 ├── data/                   # Dataset(s), dev and prod
 │   └── ...
+├── db                      # SQLite database with monitoring records
+│   └── ...
+├── db_setup.py             # Monitoring database definition
 ├── deployment.py           # It deploys a trained model
 ├── diagnostics.py          # Model and data diagnostics
 ├── full_process.py         # It checks whether re-deploy needed
@@ -154,6 +159,8 @@ To fix all those issues, monitoring is applied in 5 aspects:
 4. Reporting
 5. Process Automation
 
+Additionally, a SQL database is created to persist the records that are produced during the monitoring.
+
 Note that the file paths in the following subsections are denoted for the **`development`** stage; in a **`production`** stage:
 
 - The data is ingested from `data/source`.
@@ -187,6 +194,7 @@ Produced outputs:
 
 - `data/ingested/final_data.csv`: merged dataset.
 - `data/ingested/ingested_files.csv`: dataset origin info related to the merge (path, entries, timestamp).
+- Records in `db/monitoring.sqlite`: the contents from `ingested_files.csv` are appended to the `Ingestions` table.
 
 ### 2. Training, Scoring, Deploying
 
@@ -201,6 +209,7 @@ After loading all the necessary parameters from [`config.json`](./config.json), 
   - Load the test dataset: `data/test/test_data.csv`
   - Compute the F1 score of the model on the test dataset
   - Persist score records to file: `models/development/latest_score.csv`
+  - Persist score records to overall database: `db/monitoring.sqlite`
 - [`deployment.py`](./deployment.py):
   - Copy the following files from the development/practice folders to the deployment folder `deployment`:
     - The trained model: `models/development/trained_model.pkl`
@@ -296,11 +305,37 @@ crontab -e
 crontab -l
 ```
 
+### Monitoring Database
+
+The current implementation produces the monitoring records of each run as `CSV` files and also as entries in a SQLite database. The CSV files are ASCII files that can be moved along with other artifacts; as such, the complement the inference pipeline. On the other hand, the SQLite database stores the records of all runs together; it is created in `db/monitoring.sqlite` when `ingestion.py` or `scoring.py` are executed. Its implementation is in [`db_setup.py`](./db_setup.py).
+
+The current database `db/monitoring.sqlite` has two tables: `Ingestions` and `Scores`. As any with SQLite database, we can use the CLI tool to query its contents:
+
+```bash
+# Install SQLite - on a Mac:
+brew install sqlite
+# Go to database folder
+cd db
+sqlite3
+.open monitoring.sqlite
+.tables
+# Ingestions Scores
+# Show content of the tables
+SELECT * FROM Ingestions;
+# ...
+SELECT * FROM Scores;
+# ...
+# Exit
+.quit
+```
+
+For more information on SQL and related tools, check my [sql_guide](https://github.com/mxagar/sql_guide).
+
 ## Next Steps, Improvements
 
 This is a basic monitoring project in which a very simple model/pipeline is created. However, a valid, general framework which uses the minimum amount of 3rd party tools is defined; moreover, we can easily scale the complexity of the inference pipeline, e.g., by defining it in a separate library which is accessed by the scripts in this project. As such, this repository can be used as a **blueprint for basic monitoring**. Without using any 3rd party tools, one could improve the project as follows:
 
-- [ ] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/).
+- [x] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/), [SQLite](https://www.sqlite.org/index.html) and [SQLAlchemy](https://www.sqlalchemy.org/).
 - [ ] Generate PDF reports which aggregate all outcomes (plots, summary statistics, etc.); check: [reportlab](https://www.reportlab.com/).
 - [ ] Store time trends: timestamp the reported results and store them (e.g., NAs, latency, etc.).
 
@@ -309,6 +344,7 @@ This is a basic monitoring project in which a very simple model/pipeline is crea
 My notes and guides:
 
 - My personal notes on the [Udacity MLOps](https://www.udacity.com/course/machine-learning-dev-ops-engineer-nanodegree--nd0821) Nanodegree: [mlops_udacity](https://github.com/mxagar/mlops_udacity).
+- My personal guise on SQL and related tools, such as SQLAlchemy: [sql_guide](https://github.com/mxagar/sql_guide).
 - My boilerplate for reproducible ML pipelines using [MLflow](https://www.mlflow.org/) and [Weights & Biases](https://wandb.ai/site): [music_genre_classification](https://github.com/mxagar/music_genre_classification).
 - Notes on how to transform research code into production-level packages: [customer_churn_production](https://github.com/mxagar/customer_churn_production).
 - My summary of data processing and modeling techniques: [eda_fe_summary](https://github.com/mxagar/eda_fe_summary).

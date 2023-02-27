@@ -17,6 +17,7 @@ from sklearn import metrics
 #from flask import Flask, session, jsonify, request
 
 from training import load_pipeline
+from db_setup import Database
 
 # Load config.json and get path variables
 with open('config.json','r') as f:
@@ -78,6 +79,19 @@ def score_model(model_path=model_path,
              "value": [f1]}
     df_score = pd.DataFrame(score)
     df_score.to_csv(score_path, sep=',', header=True, index=False)
+    
+    # EXTRA: Persist to sqlite database
+    # FIXME: we should not instantiate the database every ingestion
+    # but rather pass it to the ingestion process...
+    db = Database()
+    db.insert_score({"model_version": version,
+                     "timestamp": datetime.now(),
+                     "score_type": "F1",
+                     "value": f1})
+    # Check: convert to CSV
+    scores = db.convert_scores_to_df()
+    scores.to_csv('db/scores.csv', sep=',', header=True, index=False)
+    db.close()
     
     return f1
     

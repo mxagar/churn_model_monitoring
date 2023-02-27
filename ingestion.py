@@ -12,6 +12,7 @@ import numpy as np
 import os
 import json
 from datetime import datetime
+from db_setup import Database
 
 # Load config.json and get input and output paths
 with open('config.json','r') as f:
@@ -88,6 +89,17 @@ def merge_multiple_data():
                     f.write(",")
                 else:
                     f.write("\n")
+    
+    # EXTRA: Persist to sqlite database
+    # FIXME: we should not instantiate the database every ingestion
+    # but rather pass it to the ingestion process...
+    db = Database()
+    for record in records:
+        db.insert_ingestion({"filepath": record[0], "num_entries": record[1], "timestamp": record[2]})
+    # Check: convert to CSV
+    ingestions = db.convert_ingestions_to_df()
+    ingestions.to_csv('db/ingestions.csv', sep=',', header=True, index=False)
+    db.close()
 
 if __name__ == '__main__':
     merge_multiple_data()

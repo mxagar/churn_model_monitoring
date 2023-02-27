@@ -144,3 +144,5 @@ models/production/*.csv
 models/production/*.png
 deployment/*.pkl
 deployment/*.csv
+db/*.csv
+db/*.sqlite

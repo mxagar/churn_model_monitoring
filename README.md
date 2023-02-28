@@ -338,6 +338,7 @@ This is a basic monitoring project in which a very simple model/pipeline is crea
 - [x] Store datasets and records in SQL databases, e.g., with [MySQL Connector/Python](https://dev.mysql.com/doc/connector-python/en/), [SQLite](https://www.sqlite.org/index.html) and [SQLAlchemy](https://www.sqlalchemy.org/).
 - [ ] Generate PDF reports which aggregate all outcomes (plots, summary statistics, etc.); check: [reportlab](https://www.reportlab.com/).
 - [ ] Store time trends: timestamp the reported results and store them (e.g., NAs, latency, etc.).
+- [ ] Add tests.
 
 ## References and Links
 
